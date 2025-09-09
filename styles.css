@@ -1,0 +1,284 @@
+/* Halloween MMORPG Client Styles - Animation Support */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a0033, #330066);
+    color: #fff;
+    overflow: hidden;
+}
+
+#gameContainer {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#gameCanvas {
+    display: block;
+    cursor: crosshair;
+}
+
+#ui {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ff6b35;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+    font-size: 14px;
+    min-width: 280px;
+    max-width: 350px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+h1 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #ff6b35;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+#status {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#coordinates {
+    color: #ffd43b;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+#instructions {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+#spriteControls {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#spriteSelect {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.upload-btn {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin: 5px 0;
+}
+
+.upload-btn:hover {
+    background: linear-gradient(45deg, #f7931e, #ff6b35);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+}
+
+#uploadArea {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #444;
+}
+
+.upload-area {
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+/* Direction Group Styles */
+.direction-group {
+    margin: 15px 0;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.direction-header {
+    background: rgba(255, 107, 53, 0.2);
+    padding: 8px 10px;
+    border-bottom: 1px solid #555;
+    border-radius: 4px 4px 0 0;
+}
+
+.direction-label {
+    font-weight: bold;
+    color: #ffd43b;
+    font-size: 14px;
+}
+
+.frame-uploads {
+    padding: 10px;
+}
+
+.frame-upload {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.frame-upload label {
+    width: 60px;
+    font-size: 11px;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.direction-file {
+    flex: 1;
+    min-width: 120px;
+    padding: 3px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 3px;
+    font-size: 10px;
+}
+
+.preview-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border: 1px solid #666;
+    border-radius: 3px;
+    background: #000;
+}
+
+.size-info {
+    font-size: 9px;
+    color: #ccc;
+    min-width: 80px;
+    text-align: right;
+}
+
+#debugInfo {
+    font-size: 10px;
+    color: #888;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 3px;
+    margin-top: 10px;
+    border: 1px solid #333;
+    word-wrap: break-word;
+}
+
+/* Scrollbar styles for the UI panel */
+#ui::-webkit-scrollbar {
+    width: 6px;
+}
+
+#ui::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+#ui::-webkit-scrollbar-thumb {
+    background: rgba(255, 107, 53, 0.6);
+    border-radius: 3px;
+}
+
+#ui::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 107, 53, 0.8);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #ui {
+        font-size: 12px;
+        min-width: 250px;
+        max-width: 300px;
+        max-height: 85vh;
+    }
+    
+    h1 {
+        font-size: 16px;
+    }
+    
+    .frame-upload {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+    }
+    
+    .frame-upload label {
+        width: auto;
+        margin-bottom: 2px;
+    }
+    
+    .direction-file {
+        min-width: auto;
+    }
+    
+    .preview-image {
+        align-self: center;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .size-info {
+        text-align: left;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    #ui {
+        min-width: 220px;
+        max-width: 280px;
+        font-size: 11px;
+    }
+    
+    .direction-header {
+        padding: 6px 8px;
+    }
+    
+    .frame-uploads {
+        padding: 8px;
+    }
+    
+    .frame-upload {
+        margin: 6px 0;
+    }
+    
+    .direction-file {
+        font-size: 9px;
+        padding: 2px;
+    }
+    
+    .preview-image {
+        width: 20px;
+        height: 20px;
+    }
+}

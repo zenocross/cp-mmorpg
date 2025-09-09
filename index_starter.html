@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween MMORPG Client - Animated Sprites</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui">
+            <h1>🎃 Halloween World</h1>
+            <div id="status">Connecting to server...</div>
+            <div id="coordinates">Position: (0, 0)</div>
+            <div id="instructions">
+                <strong>Controls:</strong><br>
+                Arrow Keys: Move character<br>
+                WASD: Alternative movement<br>
+                Mouse: Click to move
+            </div>
+            
+            <div id="spriteControls">
+                <strong>Character Sprite:</strong><br>
+                <select id="spriteSelect">
+                    <option value="">Loading sprites...</option>
+                </select>
+                
+                <div id="uploadContainer">
+                    <button class="upload-btn" onclick="toggleUpload()">Upload Custom Sprite</button>
+                    <div id="uploadArea" style="display: none;">
+                        <div class="upload-area">
+                            <strong>Upload Sprite Animation Frames</strong><br>
+                            <small>Upload 1-3 PNG files for each direction (will auto-resize to max 256x256 pixels)</small>
+                        </div>
+                        
+                        <input type="text" id="spriteName" placeholder="Sprite name" 
+                               style="width: 100%; padding: 5px; margin: 5px 0; background: #333; color: #fff; border: 1px solid #555; border-radius: 3px;">
+                        
+                        <!-- North Direction -->
+                        <div class="direction-group">
+                            <div class="direction-header">
+                                <span class="direction-label">North:</span>
+                            </div>
+                            <div class="frame-uploads">
+                                <div class="frame-upload">
+                                    <label>Frame 1:</label>
+                                    <input type="file" id="north1File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="north1Preview" class="preview-image" style="display: none;">
+                                    <span id="north1Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 2:</label>
+                                    <input type="file" id="north2File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="north2Preview" class="preview-image" style="display: none;">
+                                    <span id="north2Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 3:</label>
+                                    <input type="file" id="north3File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="north3Preview" class="preview-image" style="display: none;">
+                                    <span id="north3Size" class="size-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- South Direction -->
+                        <div class="direction-group">
+                            <div class="direction-header">
+                                <span class="direction-label">South:</span>
+                            </div>
+                            <div class="frame-uploads">
+                                <div class="frame-upload">
+                                    <label>Frame 1:</label>
+                                    <input type="file" id="south1File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="south1Preview" class="preview-image" style="display: none;">
+                                    <span id="south1Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 2:</label>
+                                    <input type="file" id="south2File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="south2Preview" class="preview-image" style="display: none;">
+                                    <span id="south2Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 3:</label>
+                                    <input type="file" id="south3File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="south3Preview" class="preview-image" style="display: none;">
+                                    <span id="south3Size" class="size-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- East Direction -->
+                        <div class="direction-group">
+                            <div class="direction-header">
+                                <span class="direction-label">East:</span>
+                            </div>
+                            <div class="frame-uploads">
+                                <div class="frame-upload">
+                                    <label>Frame 1:</label>
+                                    <input type="file" id="east1File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="east1Preview" class="preview-image" style="display: none;">
+                                    <span id="east1Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 2:</label>
+                                    <input type="file" id="east2File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="east2Preview" class="preview-image" style="display: none;">
+                                    <span id="east2Size" class="size-info"></span>
+                                </div>
+                                <div class="frame-upload">
+                                    <label>Frame 3:</label>
+                                    <input type="file" id="east3File" accept="image/png,image/jpeg,image/gif" class="direction-file">
+                                    <img id="east3Preview" class="preview-image" style="display: none;">
+                                    <span id="east3Size" class="size-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 10px 0; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                            <small style="color: #ffd43b;">
+                                💡 West direction will automatically use flipped East frames.<br>
+                                🎬 Upload 1-3 frames per direction for animation.
+                            </small>
+                        </div>
+                        
+                        <button class="upload-btn" onclick="uploadSprite()" style="width: 100%; margin-top: 10px;">
+                            Upload Animated Sprite
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="debugInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const statusDiv = document.getElementById('status');
+        const coordinatesDiv = document.getElementById('coordinates');
+        const spriteSelect = document.getElementById('spriteSelect');
+        const debugInfo = document.getElementById('debugInfo');
+        const ws = new WebSocket('ws://localhost:8080');
+
+        let players = {};
+        let myPlayerId = null;
+        let spriteDatabase = {};
+        let loadedImages = {}; // Cache for loaded sprite images
+        let processedImages = {}; // Cache for processed/resized images
+        
+        // World and viewport settings
+        const WORLD_WIDTH = 4096;
+        const WORLD_HEIGHT = 4096;
+        let viewportX = 0;
+        let viewportY = 0;
+        let canvasWidth = window.innerWidth;
+        let canvasHeight = window.innerHeight;
+
+        // Sprite size constraints
+        const MAX_SPRITE_WIDTH = 256;
+        const MAX_SPRITE_HEIGHT = 256;
+
+        // Map
+        let mapImage = new Image();
+        let mapLoaded = false;
+
+        // Toggle upload area visibility
+        function toggleUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.style.display = uploadArea.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Resize image to fit within maximum dimensions while preserving aspect ratio
+        function resizeImage(img, maxWidth, maxHeight) {
+            return new Promise((resolve) => {
+                // If image is already within limits, return as-is
+                if (img.width <= maxWidth && img.height <= maxHeight) {
+                    // Convert to canvas anyway to ensure PNG format
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                    return;
+                }
+
+                // Calculate new dimensions preserving aspect ratio
+                const aspectRatio = img.width / img.height;
+                let newWidth, newHeight;
+
+                if (img.width / maxWidth > img.height / maxHeight) {
+                    // Width is the constraining dimension
+                    newWidth = maxWidth;
+                    newHeight = maxWidth / aspectRatio;
+                } else {
+                    // Height is the constraining dimension
+                    newHeight = maxHeight;
+                    newWidth = maxHeight * aspectRatio;
+                }
+
+                // Create canvas for resizing
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = Math.round(newWidth);
+                canvas.height = Math.round(newHeight);
+
+                // Use high-quality image scaling
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                // Draw resized image
+                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+                // Return as PNG data URL
+                resolve(canvas.toDataURL('image/png'));
+            });
+        }
+
+        // Process and resize uploaded image
+        function processUploadedImage(file, frameId) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = async () => {
+                    try {
+                        const originalSize = `${img.width}x${img.height}`;
+                        const wasResized = img.width > MAX_SPRITE_WIDTH || img.height > MAX_SPRITE_HEIGHT;
+                        
+                        // Resize the image
+                        const resizedDataURL = await resizeImage(img, MAX_SPRITE_WIDTH, MAX_SPRITE_HEIGHT);
+                        
+                        // Create new image to get final dimensions
+                        const finalImg = new Image();
+                        finalImg.onload = () => {
+                            const finalSize = `${finalImg.width}x${finalImg.height}`;
+                            const statusText = wasResized ? 
+                                `${originalSize} → ${finalSize} ✓` : 
+                                `${finalSize} ✓`;
+                            
+                            resolve({
+                                dataURL: resizedDataURL,
+                                statusText: statusText,
+                                wasResized: wasResized,
+                                finalWidth: finalImg.width,
+                                finalHeight: finalImg.height
+                            });
+                        };
+                        finalImg.src = resizedDataURL;
+                        
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                img.onerror = () => {
+                    reject(new Error(`Failed to load ${frameId} image`));
+                };
+                
+                // Load the image
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => {
+                    reject(new Error(`Failed to read ${frameId} file`));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Handle file selection with automatic resizing and preview for animation frames
+        function setupFramePreview(fileInputId, previewId, sizeId) {
+            const fileInput = document.getElementById(fileInputId);
+            const preview = document.getElementById(previewId);
+            const sizeSpan = document.getElementById(sizeId);
+            
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        sizeSpan.textContent = 'Processing...';
+                        sizeSpan.style.color = '#ffd43b';
+                        
+                        const result = await processUploadedImage(file, fileInputId);
+                        
+                        // Store processed image data for upload
+                        processedImages[fileInputId] = result.dataURL;
+                        
+                        // Update preview
+                        preview.src = result.dataURL;
+                        preview.style.display = 'block';
+                        
+                        // Update size info
+                        sizeSpan.textContent = result.statusText;
+                        sizeSpan.style.color = result.wasResized ? '#ffd43b' : '#51cf66';
+                        
+                    } catch (error) {
+                        console.error(`Error processing ${fileInputId}:`, error);
+                        sizeSpan.textContent = 'Error processing image';
+                        sizeSpan.style.color = '#ff6b6b';
+                        preview.style.display = 'none';
+                    }
+                } else {
+                    preview.style.display = 'none';
+                    sizeSpan.textContent = '';
+                    delete processedImages[fileInputId];
+                }
+            });
+        }
+
+        // Upload sprite to server using processed animation frames
+        async function uploadSprite() {
+            const spriteName = document.getElementById('spriteName').value.trim();
+            if (!spriteName) {
+                alert('Please enter a sprite name');
+                return;
+            }
+
+            const directions = ['north', 'south', 'east'];
+            const imageData = {};
+            let hasAnyImage = false;
+
+            try {
+                // Collect processed animation frames for each direction
+                for (const direction of directions) {
+                    const frames = [];
+                    for (let frameNum = 1; frameNum <= 3; frameNum++) {
+                        const frameId = `${direction}${frameNum}File`;
+                        if (processedImages[frameId]) {
+                            frames.push(processedImages[frameId]);
+                            hasAnyImage = true;
+                        }
+                    }
+                    if (frames.length > 0) {
+                        imageData[direction] = frames;
+                    }
+                }
+
+                if (!hasAnyImage) {
+                    alert('Please select at least one animation frame');
+                    return;
+                }
+
+                // Send to server
+                statusDiv.textContent = 'Uploading animated sprite...';
+                ws.send(JSON.stringify({
+                    type: 'upload_sprite',
+                    spriteName: spriteName,
+                    imageData: imageData
+                }));
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Error uploading sprite: ' + error.message);
+            }
+        }
+
+        // Initialize canvas size
+        function resizeCanvas() {
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            draw();
+        }
+
+        // Load the Halloween map
+        function loadMap() {
+            mapImage.onload = () => {
+                mapLoaded = true;
+                console.log('Halloween map loaded successfully!');
+                statusDiv.textContent = 'Map loaded! ' + statusDiv.textContent;
+                draw();
+            };
+            mapImage.onerror = (e) => {
+                console.error('Failed to load Halloween map. Make sure maps/halloweenmap.png exists.');
+                console.error('Error details:', e);
+                statusDiv.textContent = 'Warning: Map not found. Using grid background.';
+                // Still allow the game to continue without the map
+            };
+            console.log('Attempting to load map from: maps/halloweenmap.png');
+            mapImage.src = 'maps/halloweenmap.png';
+        }
+
+        // Load sprite animation frames into cache
+        function loadSpriteImage(spriteName, direction, frameIndex = 0) {
+            const key = `${spriteName}_${direction}_${frameIndex}`;
+            if (loadedImages[key]) {
+                return loadedImages[key];
+            }
+            
+            const sprite = spriteDatabase[spriteName];
+            if (!sprite || !sprite.frames[direction] || !sprite.frames[direction][frameIndex]) {
+                return null;
+            }
+            
+            const img = new Image();
+            img.onload = () => {
+                console.log(`Loaded sprite frame: ${key} (${img.width}x${img.height})`);
+                draw(); // Redraw when sprite loads
+            };
+            img.onerror = () => {
+                console.error(`Failed to load sprite frame: ${key}`);
+            };
+            img.src = sprite.frames[direction][frameIndex];
+            
+            loadedImages[key] = img;
+            return img;
+        }
+
+        // Get sprite image for rendering, handling west direction flipping and animation
+        function getSpriteForRendering(spriteName, facing, animationFrame = 0) {
+            const sprite = spriteDatabase[spriteName];
+            if (!sprite) return null;
+
+            // Use east sprite frames for west direction
+            if (facing === 'west' && sprite.frames.east && sprite.frames.east.length > 0) {
+                const frameIndex = Math.min(animationFrame, sprite.frames.east.length - 1);
+                return loadSpriteImage(spriteName, 'east', frameIndex);
+            }
+
+            // Otherwise use the appropriate direction
+            if (sprite.frames[facing] && sprite.frames[facing].length > 0) {
+                const frameIndex = Math.min(animationFrame, sprite.frames[facing].length - 1);
+                return loadSpriteImage(spriteName, facing, frameIndex);
+            }
+
+            return null;
+        }
+
+        // Preload all sprite animation frames
+        function preloadSprites() {
+            for (const spriteName in spriteDatabase) {
+                const sprite = spriteDatabase[spriteName];
+                for (const direction in sprite.frames) {
+                    if (Array.isArray(sprite.frames[direction])) {
+                        sprite.frames[direction].forEach((_, frameIndex) => {
+                            loadSpriteImage(spriteName, direction, frameIndex);
+                        });
+                    }
+                }
+            }
+        }
+
+        // Update sprite selection dropdown
+        function updateSpriteSelect() {
+            spriteSelect.innerHTML = '';
+            
+            for (const spriteName in spriteDatabase) {
+                const option = document.createElement('option');
+                option.value = spriteName;
+                
+                // Show frame count info
+                const sprite = spriteDatabase[spriteName];
+                const frameInfo = ['north', 'south', 'east'].map(dir => 
+                    sprite.frames[dir] ? sprite.frames[dir].length : 0
+                ).join('/');
+                option.textContent = `${spriteName} (${frameInfo} frames)`;
+                
+                spriteSelect.appendChild(option);
+            }
+            
+            // Set current player's sprite as selected
+            if (myPlayerId && players[myPlayerId]) {
+                spriteSelect.value = players[myPlayerId].sprite;
+            }
+        }
+
+        // Handle sprite selection change
+        spriteSelect.addEventListener('change', () => {
+            if (myPlayerId && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'player_change_sprite',
+                    sprite: spriteSelect.value
+                }));
+            }
+        });
+
+        // Update viewport to follow the current player
+        function updateViewport() {
+            if (myPlayerId && players[myPlayerId]) {
+                const player = players[myPlayerId];
+                
+                viewportX = player.x - canvasWidth / 2;
+                viewportY = player.y - canvasHeight / 2;
+                
+                viewportX = Math.max(0, Math.min(WORLD_WIDTH - canvasWidth, viewportX));
+                viewportY = Math.max(0, Math.min(WORLD_HEIGHT - canvasHeight, viewportY));
+                
+                coordinatesDiv.textContent = `Position: (${Math.round(player.x)}, ${Math.round(player.y)}) Facing: ${player.facing || 'south'} Frame: ${player.animationFrame || 0}`;
+            }
+        }
+
+        // Function to draw the game world
+        function draw() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            // Draw the map background if loaded
+            if (mapLoaded) {
+                ctx.drawImage(
+                    mapImage,
+                    viewportX, viewportY, canvasWidth, canvasHeight,
+                    0, 0, canvasWidth, canvasHeight
+                );
+            } else {
+                // Draw placeholder background
+                ctx.fillStyle = '#2d1b3d';
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                
+                // Draw grid for reference
+                ctx.strokeStyle = '#444';
+                ctx.lineWidth = 1;
+                for (let x = -viewportX % 100; x < canvasWidth; x += 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvasHeight);
+                    ctx.stroke();
+                }
+                for (let y = -viewportY % 100; y < canvasHeight; y += 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvasWidth, y);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw all players with animation
+            for (const id in players) {
+                const player = players[id];
+                
+                const screenX = player.x - viewportX;
+                const screenY = player.y - viewportY;
+                
+                // Get the appropriate sprite image with animation frame
+                const facing = player.facing || 'south';
+                const animationFrame = player.animationFrame || 0;
+                const spriteImg = getSpriteForRendering(player.sprite, facing, animationFrame);
+                
+                if (spriteImg && spriteImg.complete) {
+                    // Use native sprite dimensions
+                    const spriteWidth = spriteImg.width;
+                    const spriteHeight = spriteImg.height;
+                    
+                    // Calculate position to center sprite on player position
+                    const drawX = screenX - spriteWidth / 2;
+                    const drawY = screenY - spriteHeight / 2;
+                    
+                    // Check if sprite is visible on screen
+                    if (drawX > -spriteWidth && drawX < canvasWidth + spriteWidth &&
+                        drawY > -spriteHeight && drawY < canvasHeight + spriteHeight) {
+                        
+                        // Save the current canvas state
+                        ctx.save();
+                        
+                        // Check if we need to flip for west direction
+                        const sprite = spriteDatabase[player.sprite];
+                        const shouldFlip = facing === 'west' && sprite && sprite.frames.east;
+                        
+                        if (shouldFlip) {
+                            ctx.translate(screenX, screenY);
+                            ctx.scale(-1, 1);
+                            ctx.drawImage(
+                                spriteImg,
+                                -spriteWidth / 2, -spriteHeight / 2, spriteWidth, spriteHeight
+                            );
+                        } else {
+                            ctx.drawImage(
+                                spriteImg,
+                                drawX, drawY, spriteWidth, spriteHeight
+                            );
+                        }
+                        
+                        // Restore the canvas state
+                        ctx.restore();
+                        
+                        // Draw player username label below sprite
+                        ctx.fillStyle = id === myPlayerId ? '#4CAF50' : '#fff';
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(
+                            player.username || id, 
+                            screenX, 
+                            drawY + spriteHeight + 15
+                        );
+                        
+                        // Draw a circle around the current player
+                        if (id === myPlayerId) {
+                            ctx.strokeStyle = '#4CAF50';
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.arc(screenX, screenY, Math.max(spriteWidth, spriteHeight) / 2 + 5, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    }
+                } else {
+                    // Draw placeholder while sprite loads (using fallback size)
+                    const fallbackSize = 64;
+                    const drawX = screenX - fallbackSize / 2;
+                    const drawY = screenY - fallbackSize / 2;
+                    
+                    if (drawX > -fallbackSize && drawX < canvasWidth + fallbackSize &&
+                        drawY > -fallbackSize && drawY < canvasHeight + fallbackSize) {
+                        
+                        ctx.fillStyle = id === myPlayerId ? '#4CAF50' : '#999';
+                        ctx.fillRect(drawX, drawY, fallbackSize, fallbackSize);
+                        
+                        // Draw facing direction indicator
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(
+                            facing.charAt(0).toUpperCase(),
+                            screenX,
+                            screenY
+                        );
+                        
+                        // Draw player username label
+                        ctx.fillStyle = id === myPlayerId ? '#4CAF50' : '#fff';
+                        ctx.fillText(
+                            player.username || id, 
+                            screenX, 
+                            drawY + fallbackSize + 15
+                        );
+                        
+                        // Draw a circle around the current player
+                        if (id === myPlayerId) {
+                            ctx.strokeStyle = '#4CAF50';
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.arc(screenX, screenY, fallbackSize / 2 + 5, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Update debug info with animation details
+            let debugText = `Sprites loaded: ${Object.keys(loadedImages).length} | Players: ${Object.keys(players).length}`;
+            if (myPlayerId && players[myPlayerId]) {
+                const myPlayer = players[myPlayerId];
+                const sprite = spriteDatabase[myPlayer.sprite];
+                debugText += ` | My sprite: ${myPlayer.sprite} | Facing: ${myPlayer.facing} | Frame: ${myPlayer.animationFrame || 0}`;
+                if (sprite) {
+                    const frameInfo = Object.entries(sprite.frames).map(([dir, frames]) => 
+                        `${dir}:${Array.isArray(frames) ? frames.length : 0}`
+                    ).join(', ');
+                    debugText += ` | Frames: ${frameInfo}`;
+                }
+            }
+            debugInfo.textContent = debugText;
+        }
+
+        // Handle WebSocket connection opening
+        ws.onopen = () => {
+            statusDiv.textContent = 'Connected! Loading sprites...';
+            console.log('Connected to the server');
+            ws.send(JSON.stringify({ type: 'request_sprites' }));
+        };
+
+        // Handle incoming messages from the server
+        ws.onmessage = event => {
+            const data = JSON.parse(event.data);
+            console.log('Received message:', data.type, data);
+
+            switch (data.type) {
+                case 'sprites_response':
+                    spriteDatabase = data.sprites;
+                    console.log('Received sprites:', Object.keys(spriteDatabase));
+                    console.log('Sprite database:', spriteDatabase);
+                    
+                    if (Object.keys(spriteDatabase).length === 0) {
+                        statusDiv.textContent = 'No sprites found on server. Upload some animated sprites to get started!';
+                        return;
+                    }
+                    
+                    updateSpriteSelect();
+                    preloadSprites();
+                    
+                    // Join game with default sprite
+                    const defaultSprite = Object.keys(spriteDatabase)[0] || 'default';
+                    console.log('Joining with sprite:', defaultSprite);
+                    ws.send(JSON.stringify({ 
+                        type: 'player_join', 
+                        sprite: defaultSprite, 
+                        username: 'Halloween Explorer'
+                    }));
+                    break;
+                    
+                case 'sprite_added':
+                    // New sprite was added to the database
+                    spriteDatabase[data.sprite.name] = data.sprite;
+                    updateSpriteSelect();
+                    preloadSprites();
+                    statusDiv.textContent = `New animated sprite "${data.sprite.name}" added!`;
+                    break;
+                    
+                case 'sprite_upload_success':
+                    statusDiv.textContent = `Animated sprite "${data.sprite.name}" uploaded successfully!`;
+                    // Clear upload form
+                    document.getElementById('spriteName').value = '';
+                    const directions = ['north', 'south', 'east'];
+                    directions.forEach(dir => {
+                        for (let frame = 1; frame <= 3; frame++) {
+                            const fileId = `${dir}${frame}File`;
+                            const previewId = `${dir}${frame}Preview`;
+                            const sizeId = `${dir}${frame}Size`;
+                            document.getElementById(fileId).value = '';
+                            document.getElementById(previewId).style.display = 'none';
+                            document.getElementById(sizeId).textContent = '';
+                            delete processedImages[fileId];
+                        }
+                    });
+                    toggleUpload(); // Hide upload area
+                    break;
+                    
+                case 'sprite_upload_error':
+                    statusDiv.textContent = 'Animated sprite upload failed: ' + data.error;
+                    break;
+                    
+                case 'world_state':
+                    players = data.players;
+                    myPlayerId = data.myPlayerId;
+                    statusDiv.textContent = `World joined! Players online: ${Object.keys(players).length}`;
+                    updateViewport();
+                    break;
+                    
+                case 'player_joined':
+                    players[data.player.id] = data.player;
+                    if (data.player.id !== myPlayerId) {
+                        statusDiv.textContent = `Player ${data.player.username || data.player.id} joined! Players online: ${Object.keys(players).length}`;
+                    }
+                    break;
+                    
+                case 'player_moved':
+                    if (players[data.player.id]) {
+                        players[data.player.id] = { ...players[data.player.id], ...data.player };
+                        if (data.player.id === myPlayerId) {
+                            updateViewport();
+                        }
+                    }
+                    break;
+                    
+                case 'player_left':
+                    const leftPlayer = players[data.playerId];
+                    delete players[data.playerId];
+                    statusDiv.textContent = `Player ${leftPlayer ? (leftPlayer.username || data.playerId) : data.playerId} left. Players online: ${Object.keys(players).length}`;
+                    break;
+            }
+            draw();
+        };
+
+        // Handle connection closing
+        ws.onclose = () => {
+            statusDiv.textContent = 'Disconnected from server. Please refresh to reconnect.';
+            console.log('Disconnected from server');
+        };
+
+        // Handle connection errors
+        ws.onerror = error => {
+            statusDiv.textContent = 'Error connecting to the server.';
+            console.error('WebSocket Error:', error);
+        };
+
+        // Convert screen coordinates to world coordinates
+        function screenToWorld(screenX, screenY) {
+            return {
+                x: screenX + viewportX,
+                y: screenY + viewportY
+            };
+        }
+
+        // Handle keyboard input for movement
+        document.addEventListener('keydown', e => {
+            let direction = null;
+            switch (e.key.toLowerCase()) {
+                case 'arrowup':
+                case 'w':
+                    direction = 'up';
+                    break;
+                case 'arrowdown':
+                case 's':
+                    direction = 'down';
+                    break;
+                case 'arrowleft':
+                case 'a':
+                    direction = 'left';
+                    break;
+                case 'arrowright':
+                case 'd':
+                    direction = 'right';
+                    break;
+            }
+            if (direction) {
+                e.preventDefault();
+                ws.send(JSON.stringify({ type: 'player_move', direction }));
+            }
+        });
+
+        // Handle mouse click movement
+        canvas.addEventListener('click', e => {
+            const rect = canvas.getBoundingClientRect();
+            const screenX = e.clientX - rect.left;
+            const screenY = e.clientY - rect.top;
+            const worldPos = screenToWorld(screenX, screenY);
+            
+            ws.send(JSON.stringify({ 
+                type: 'player_move_to', 
+                x: worldPos.x, 
+                y: worldPos.y 
+            }));
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', resizeCanvas);
+
+        // Initialize frame preview handlers for all animation frames
+        const directions = ['north', 'south', 'east'];
+        directions.forEach(direction => {
+            for (let frame = 1; frame <= 3; frame++) {
+                const fileId = `${direction}${frame}File`;
+                const previewId = `${direction}${frame}Preview`;
+                const sizeId = `${direction}${frame}Size`;
+                setupFramePreview(fileId, previewId, sizeId);
+            }
+        });
+
+        // Initialize
+        resizeCanvas();
+        loadMap();
+    </script>
+</body>
+</html>
