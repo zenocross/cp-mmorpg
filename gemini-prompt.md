@@ -12,11 +12,8 @@ Create a digital art character sprite in an idle standing pose using the followi
 - **Body:** [height - tall/short/average], [build - slim/stocky], [proportions]  
 - **Colors:** [list exact hex codes or color names]  
 - **Art style:** [pixel art/cartoon/realistic], [line thickness], [shading style]  
-- **Pose:** [pose specifics]  
-- **Purpose:** [what is it going to be used for]  
-
-**Example usage:** Arms relaxed at sides, showing full body, facing straight forward, looking into the camera, expression [choose: smiling / neutral / sinister grin], clean sprite style.  
-**Note:** Make it suitable for a [2D/3D] game.
+- **Pose:** Arms relaxed at sides, showing full body, facing straight forward, looking into the camera, expression [choose: smiling / neutral / sinister grin], clean sprite style. 
+- **Purpose:** Make it suitable for a 2D game.
 
 ---
 
