@@ -4,7 +4,9 @@
 
 ## I. Initial Prompt – Generic Template
 
-Create a digital art character sprite in an idle standing pose using the following specifications:
+Create a digital art character sprite in a completely frontal pose, arms relaxed at sides, facing directly toward the viewer, Head and body completely straight-on, no angle or tilt, include the feet in perfect front view, expression smiling, clean sprite style. True frontal symmetry like a paper doll.
+
+Use the following specifications:
 
 - **Hair:** [exact color], [style - bob, ponytail, etc.], [length - shoulder-length]  
 - **Face:** [skin tone], [eye color], [nose shape], [facial structure]  
@@ -12,7 +14,7 @@ Create a digital art character sprite in an idle standing pose using the followi
 - **Body:** [height - tall/short/average], [build - slim/stocky], [proportions]  
 - **Colors:** [list exact hex codes or color names]  
 - **Art style:** [pixel art/cartoon/realistic], [line thickness], [shading style]  
-- **Pose:** Arms relaxed at sides, showing full body, facing straight forward, looking into the camera, expression [choose: smiling / neutral / sinister grin], clean sprite style. 
+- **Expression:** [choose: smiling / neutral / sinister grin]
 - **Purpose:** Make it suitable for a 2D game.
 
 ---
